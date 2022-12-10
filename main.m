@@ -1,5 +1,5 @@
 Domain_size = 2*pi;
-Nx = 10-2;
+Nx = 100-2;
 dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
@@ -14,7 +14,7 @@ eps = dx;
 plot = false;
 % [reference] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 15:20;
+power = 13:17;
 T_list = T./(2.^power);
 
 result = [];
