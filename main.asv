@@ -1,0 +1,83 @@
+Domain_size = 2*pi;
+Nx = 100-2;
+dx = Domain_size/Nx;
+dimension = 1;
+init = initial(Domain_size, dx, dimension);
+init = init(:);
+D = Laplacian(Nx, Nx, dx, dimension, 1); %(nx, ny, h_step ,dim, method)
+T = 1;
+dt = 1/(100);
+alpha = 0.1;
+eps = dx;
+plot = false;
+[reference] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
+
+power = 3:5;
+T_list = T./(2.^power);
+
+result = [];
+for time_s = 1:length(T_list)
+    [sol] = AllenCahn(1, Nx, D, init, alpha, T, T_list(time_s), 1, 'l', eps);
+    e = sum((sol-reference(:,1:2^power(time_s):end)).^2, 1).^(1/2);
+    
+    result = [result, max(e)];
+end
+
+% 
+% e = sum((result-reference(:,end)).^2, 1).^(1/2);
+% tmp = T_list(:); 
+% A = [log(tmp(:)), ones(length(e),1)];
+% b = log(e(:));
+% A\b
+
+
+
+
+
+if plot
+    if dimension == 2
+    x = dx:dx:Domain_size;
+    y = dx:dx:Domain_size;
+    [xx, yy] = meshgrid(x, y);
+    figure;
+    subplot(2,2,2);
+    surf(xx, yy, reshape(hist_arr(:,end), [Nx, Nx]));
+    title('terminate')
+    colorbar;
+    caxis([-1 1]);
+    axis equal;
+    subplot(2,2,4);
+    contourf(reshape(hist_arr(:,end), [Nx, Nx]));
+    colorbar
+    caxis([-1 1]);
+    axis equal;
+    
+    subplot(2,2,1);
+    surf(xx, yy, reshape(hist_arr(:,1), [Nx, Nx]));
+    colorbar
+    colorbar;
+    caxis([-1 1]);
+    title('initial')
+    axis equal;
+    subplot(2,2,3);
+    contourf(reshape(hist_arr(:,1), [Nx, Nx]));
+    colorbar
+    colorbar;
+    caxis([-1 1]);
+    axis equal;
+else
+    x = dx:dx:Domain_size;
+    figure;
+    subplot(1,2,1);
+    plot(x, reshape(hist_arr(:,1), [1,Nx]));
+    title('initial')
+   
+    axis ([0 Domain_size -1 1]);
+    subplot(1,2,2);
+    plot(x, reshape(hist_arr(:,end), [1,Nx]));
+    title('terminate')
+    axis ([0 Domain_size -1 1]);
+end
+
+    
+end
