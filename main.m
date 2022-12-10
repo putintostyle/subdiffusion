@@ -1,5 +1,5 @@
 Domain_size = 1;
-Nx = 50-2;
+Nx = 200-2;
 dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
@@ -10,37 +10,33 @@ pow_2 = 12;
 dt = 1/(2^pow_2);
 
 alpha = 0.4;
-eps = 0.5;
+eps = dx;
 plot = false;
 % [reference] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 10:15;
+power = 13:17;
 T_list = T./(2.^power);
-my_data = [];
-for alpha_list = [0.1]
-    result = [];
-    for time_s = length(T_list):-1:1
-        
-        [sol] = AllenCahn(1, Nx, D, init, alpha, T, T_list(time_s), 1, 'l', eps);
-        
-        if time_s<length(T_list)
-            disp(size(sol_ref(:,1:2:end)))
-            disp(size(sol))
-            e = sum((sol-sol_ref(:,1:2:end)).^2, 1).^(1/2);
-            result = [result, max(e)];
-        end
+
+result = [];
+for time_s = length(T_list):-1:1
+    
+    [sol] = AllenCahn(1, Nx, D, init, alpha, T, T_list(time_s), 1, 'l', eps);
+    
+    if time_s<length(T_list)
+        disp(size(sol_ref(:,1:2:end)))
+        disp(size(sol))
+        e = sum((sol-sol_ref(:,1:2:end)).^2, 1).^(1/2);
+        result = [result, max(e)];
+    end
     sol_ref = sol;
     
     
-    end
-    my_data = [my_data; result];
-
 end
-save LTE my_data
+
 % 
 % e = sum((result-reference(:,end)).^2, 1).^(1/2);
 tmp = T_list(length(T_list):-1:1)'; 
-A = [log(tmp(1:end-1)), ones(length(result),1)];
+A = [log(tmp(2:end)), ones(length(result),1)];
 b = log(result(:));
 A\b
 
