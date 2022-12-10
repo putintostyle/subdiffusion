@@ -6,7 +6,7 @@ init = initial(Domain_size, dx, dimension);
 init = init(:);
 D = Laplacian(Nx, Nx, dx, dimension, 0);
 T = 1;
-dt = T/2^20;
+dt = T/2^16;
 alpha = 0.4;
 
 %%%%%
@@ -22,7 +22,7 @@ ref = subdiffusion(order, Nx, D, init, alpha, T, dt,1);
 % end
 % %%%%%
 
-power = 13:19;
+power = 7:12;
 T_list = T./(2.^power);
 result = [];
 for time_s = 1:length(T_list)
