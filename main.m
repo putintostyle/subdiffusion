@@ -9,12 +9,12 @@ T = 1;
 pow_2 = 12;
 dt = 1/(2^pow_2);
 
-alpha = 0.4;
+alpha = 0.7;
 eps = dx;
 plot = false;
 % [reference] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 13:17;
+power = 8:10;
 T_list = T./(2.^power);
 
 result = [];
@@ -36,7 +36,7 @@ end
 % 
 % e = sum((result-reference(:,end)).^2, 1).^(1/2);
 tmp = T_list(length(T_list):-1:1)'; 
-A = [log(tmp(2:end)), ones(length(result),1)];
+A = [log(tmp(1:end-1)), ones(length(result),1)];
 b = log(result(:));
 A\b
 
