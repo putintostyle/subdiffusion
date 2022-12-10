@@ -1,5 +1,5 @@
 Domain_size = 2*pi;
-Nx = 100-2;
+Nx = 10-2;
 dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
@@ -7,29 +7,37 @@ init = init(:);
 D = Laplacian(Nx, Nx, dx, dimension, 1); %(nx, ny, h_step ,dim, method)
 T = 1;
 pow_2 = 12;
-dt = 1/(2^12);
+dt = 1/(2^pow_2);
 
-alpha = 0.1;
+alpha = 0.4;
 eps = dx;
 plot = false;
-[reference] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
+% [reference] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 3:10;
+power = 15:20;
 T_list = T./(2.^power);
 
 result = [];
-for time_s = 1:length(T_list)
-    [sol] = AllenCahn(1, Nx, D, init, alpha, T, T_list(time_s), 1, 'l', eps);
-    e = sum((sol-reference(:,1:2^(pow_2-power(time_s)):end)).^2, 1).^(1/2);
+for time_s = length(T_list):-1:1
     
-    result = [result, max(e)];
+    [sol] = AllenCahn(1, Nx, D, init, alpha, T, T_list(time_s), 1, 'l', eps);
+    
+    if time_s<length(T_list)
+        disp(size(sol_ref(:,1:2:end)))
+        disp(size(sol))
+        e = sum((sol-sol_ref(:,1:2:end)).^2, 1).^(1/2);
+        result = [result, max(e)];
+    end
+    sol_ref = sol;
+    
+    
 end
 
 % 
 % e = sum((result-reference(:,end)).^2, 1).^(1/2);
-tmp = T_list(:); 
-A = [log(tmp(:)), ones(length(result),1)];
-b = log(e(:));
+tmp = T_list(length(T_list):-1:1)'; 
+A = [log(tmp(1:end-1)), ones(length(result),1)];
+b = log(result(:));
 A\b
 
 

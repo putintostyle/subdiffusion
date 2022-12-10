@@ -6,29 +6,37 @@ init = initial(Domain_size, dx, dimension);
 init = init(:);
 D = Laplacian(Nx, Nx, dx, dimension, 1); %(nx, ny, h_step ,dim, method)
 T = 1;
-dt = 1/(100);
+pow_2 = 5;
+dt = 1/(2^pow_2);
+
 alpha = 0.1;
 eps = dx;
 plot = false;
 [reference] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 3:5;
+power = 3:4;
 T_list = T./(2.^power);
 
 result = [];
-for time_s = 1:length(T_list)
+for time_s = length(T_list):-11
     [sol] = AllenCahn(1, Nx, D, init, alpha, T, T_list(time_s), 1, 'l', eps);
-    e = sum((sol-reference(:,1:2^power(time_s):end)).^2, 1).^(1/2);
+    
+    if time_s> 1
+        disp(size(sol_ref(:,1:2:end)))
+        disp(size(sol))
+        e = sum((sol-sol_ref(:,1:2:end)).^2, 1).^(1/2);
+    end
+    sol_ref = sol;
     
     result = [result, max(e)];
 end
 
 % 
 % e = sum((result-reference(:,end)).^2, 1).^(1/2);
-% tmp = T_list(:); 
-% A = [log(tmp(:)), ones(length(e),1)];
-% b = log(e(:));
-% A\b
+tmp = T_list(:); 
+A = [log(tmp(:)), ones(length(result),1)];
+b = log(e(:));
+A\b
 
 
 
