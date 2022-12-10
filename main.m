@@ -21,7 +21,7 @@ for alpha_list = [0.1, 0.4, 0.7, 0.9]
     result = [];
     for time_s = length(T_list):-1:1
         
-        [sol] = AllenCahn(2, Nx, D, init, alpha, T, T_list(time_s), 1, 'l', eps);
+        [sol] = AllenCahn(1, Nx, D, init, alpha, T, T_list(time_s), 1, 'l', eps);
         
         if time_s<length(T_list)
             disp(size(sol_ref(:,1:2:end)))
