@@ -6,7 +6,7 @@ init = initial(Domain_size, dx, dimension);
 init = init(:);
 D = Laplacian(Nx, Nx, dx, dimension, 0);
 T = 1;
-dt = T/2^16;
+dt = T/2^14;
 alpha = 0.4;
 
 %%%%%
