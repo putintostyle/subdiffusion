@@ -1,5 +1,5 @@
-Domain_size = 1e-3;
-Nx = 200-2;
+Domain_size = 1e-5;
+Nx = 20-2;
 dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
