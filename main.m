@@ -16,23 +16,27 @@ plot = false;
 
 power = 10:15;
 T_list = T./(2.^power);
-
-result = [];
-for time_s = length(T_list):-1:1
-    
-    [sol] = AllenCahn(1, Nx, D, init, alpha, T, T_list(time_s), 1, 'l', eps);
-    
-    if time_s<length(T_list)
-        disp(size(sol_ref(:,1:2:end)))
-        disp(size(sol))
-        e = sum((sol-sol_ref(:,1:2:end)).^2, 1).^(1/2);
-        result = [result, max(e)];
-    end
+my_data = [];
+for alpha_list = [0.1, 0.4, 0.7, 0.9]
+    result = [];
+    for time_s = length(T_list):-1:1
+        
+        [sol] = AllenCahn(2, Nx, D, init, alpha, T, T_list(time_s), 1, 'l', eps);
+        
+        if time_s<length(T_list)
+            disp(size(sol_ref(:,1:2:end)))
+            disp(size(sol))
+            e = sum((sol-sol_ref(:,1:2:end)).^2, 1).^(1/2);
+            result = [result, max(e)];
+        end
     sol_ref = sol;
     
     
-end
+    end
+    my_data = [my_data; result];
 
+end
+save LTE my_data
 % 
 % e = sum((result-reference(:,end)).^2, 1).^(1/2);
 tmp = T_list(length(T_list):-1:1)'; 
