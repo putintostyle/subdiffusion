@@ -14,7 +14,7 @@ eps = dx;
 plot = false;
 % [reference] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 8:10;
+power = 12:16;
 T_list = T./(2.^power);
 
 result = [];
