@@ -7,7 +7,7 @@ init = init(:);
 D = Laplacian(Nx, Nx, dx, dimension, 1);
 T = 1;
 % dt = T/2^14;
-alpha = 0.3;
+alpha = 0.7;
 
 %%%%%
 order = 1;
