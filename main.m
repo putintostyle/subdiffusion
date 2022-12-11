@@ -5,11 +5,11 @@ dimension = 1;
 init = initial(Domain_size, dx, dimension);
 init = init(:);
 D = Laplacian(Nx, Nx, dx, dimension, 1); %(nx, ny, h_step ,dim, method)
-T = 100;
+T = 1;
 pow_2 = 12;
 dt = T/2^8;
 
-alpha = 0.;
+alpha = 0.7;
 eps = dx;
 plot_fig = true;
 [hist_arr] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
