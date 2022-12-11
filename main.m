@@ -1,20 +1,20 @@
 Domain_size = 1;
-Nx = 10-2;
+Nx = 100-2;
 dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
 init = init(:);
 D = Laplacian(Nx, Nx, dx, dimension, 1); %(nx, ny, h_step ,dim, method)
-T = 1;
+T = 100;
 pow_2 = 12;
-% dt = T/(10);
+dt = T/2^8;
 
 alpha = 0.;
 eps = dx;
-plot_fig = false;
-% [hist_arr] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
+plot_fig = true;
+[hist_arr] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 9:14;
+power = 8:12;
 T_list = T./(2.^power);
 
 

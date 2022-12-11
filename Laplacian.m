@@ -8,7 +8,7 @@ function D = Laplacian(nx, ny, h_step ,dim, method)
             off_diag = full(sparse(row, col, data, nx, nx));
             off_diag = off_diag+off_diag';
             D = off_diag-2.*(eye(nx));
-            D = D./h_step/h_step;
+            D = D./h_step./h_step;
         elseif dim == 2
             I = eye(nx);
             row = 2:nx;
@@ -19,7 +19,7 @@ function D = Laplacian(nx, ny, h_step ,dim, method)
             off_diag = off_diag+off_diag';
             S = off_diag-4.*(eye(nx));
             D = kron(I, S)+kron(off_diag, I);
-            D = D./h_step/h_step;
+            D = D./h_step./h_step;
     
         end
 
@@ -32,7 +32,7 @@ function D = Laplacian(nx, ny, h_step ,dim, method)
             off_diag = full(sparse(row, col, data, nx, nx));
             off_diag = off_diag+off_diag';
             D = off_diag-2.*(eye(nx));
-            D = D./h_step/h_step;
+            D = D./h_step./h_step;
         elseif dim== 2
             row = 2:nx^2;
             col = 1:nx^2-1;
