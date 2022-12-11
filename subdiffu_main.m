@@ -1,5 +1,5 @@
 Domain_size = 1;
-Nx = 2^10-2;
+Nx = 100-2;
 dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
@@ -22,8 +22,8 @@ order = 1;
 % end
 % %%%%%
 
-power = 2.^(-1:3).*10;
-T_list = T./power;
+power = 10:14;
+T_list = T./(2.^power);
 result = [];
 max_result = [];
 for time_s = length(T_list):-1:1
