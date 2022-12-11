@@ -58,5 +58,5 @@ function history_arr = subdiffusion(order, Nx, D, init, alpha, T, dt, dim)
             history_arr = [history_arr, root(:)];
         end
     end
-    history_arr = history_arr(:,end);
+%     history_arr = history_arr(:,end);
 end 

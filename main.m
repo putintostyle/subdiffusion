@@ -1,4 +1,4 @@
-Domain_size = 1e-5;
+Domain_size = 1e-10;
 Nx = 20-2;
 dx = Domain_size/Nx;
 dimension = 1;
@@ -9,13 +9,14 @@ T = 1;
 pow_2 = 12;
 dt = 1/(2^pow_2);
 
-alpha = 0.1;
+alpha = 0.4;
 eps = dx;
 plot = false;
 % [reference] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 1:4;
-T_list = T./(2.^power)/10^4;
+power = 0:4;
+T_list = T./(2.^power)/5/10^3;
+
 
 result = [];
 for time_s = length(T_list):-1:1
