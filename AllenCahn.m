@@ -13,26 +13,26 @@ function [hist_arr] = AllenCahn(order, Nx, D, init, alpha, T, dt, dim, method, e
                 
                 root = fsolve(fun, x_0, options);
             elseif method == 'l'
-                b = -(1*q(1)+3).*hist_arr(:,end)+hist_arr(:,end).^3;
+                b = (q(1)+3).*hist_arr(:,end)-hist_arr(:,end).^3;
             
             
                 if iteration == 1
                     if dim == 1
-                        root  = linsolve((-(q(1)+2).*eye(Nx)+eps^2.*D),(b));
+                        root  = linsolve(((q(1)+2).*eye(Nx)-eps^2.*D),(b));
                     elseif dim ==2
-                        root  = linsolve((-(q(1)+2).*eye(Nx^2)+eps^2.*D),(b));
+                        root  = linsolve(((q(1)+2).*eye(Nx^2)-eps^2.*D),(b));
                     end
                     
                     
                 else
                     for time = 1:iteration-1
                          
-                        b = b+q(time+1).*(hist_arr(:,end-(time-1))-hist_arr(:,end-(time-1)-1));     
+                        b = b-q(time+1).*(hist_arr(:,end-(time-1))-hist_arr(:,end-(time-1)-1));     
                              
                         if dim == 1
-                            root  = linsolve((-(q(1)+2).*eye(Nx)+eps^2.*D),(b));
+                            root  = linsolve(((q(1)+2).*eye(Nx)-eps^2.*D),(b));
                         elseif dim ==2
-                            root  = linsolve((-(q(1)+2).*eye(Nx^2)+eps^2.*D),(b));
+                            root  = linsolve(((q(1)+2).*eye(Nx^2)-eps^2.*D),(b));
                         end     
                     end
                 end

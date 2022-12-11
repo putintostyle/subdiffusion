@@ -1,5 +1,5 @@
-Domain_size = 1e-10;
-Nx = 20-2;
+Domain_size = 1;
+Nx = 10-2;
 dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
@@ -7,15 +7,15 @@ init = init(:);
 D = Laplacian(Nx, Nx, dx, dimension, 1); %(nx, ny, h_step ,dim, method)
 T = 1;
 pow_2 = 12;
-dt = 1/(2^pow_2);
+% dt = T/(10);
 
-alpha = 0.4;
+alpha = 0.;
 eps = dx;
-plot = false;
-% [reference] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
+plot_fig = false;
+% [hist_arr] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 0:4;
-T_list = T./(2.^power)/5/10^3;
+power = 9:14;
+T_list = T./(2.^power);
 
 
 result = [];
@@ -45,7 +45,7 @@ A\b
 
 
 
-if plot
+if plot_fig
     if dimension == 2
     x = dx:dx:Domain_size;
     y = dx:dx:Domain_size;
