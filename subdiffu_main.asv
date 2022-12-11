@@ -22,7 +22,7 @@ order = 1;
 % end
 % %%%%%
 
-power = 2.^(-1:3).*10;
+power = 5.*(0:);
 T_list = T./power;
 result = [];
 max_result = [];
