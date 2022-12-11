@@ -9,7 +9,7 @@ T = 1;
 pow_2 = 12;
 dt = T/2^8;
 
-alpha = 0.7;
+alpha = 0.3;
 eps = dx;
 plot_fig = true;
 [hist_arr] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)

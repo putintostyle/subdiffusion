@@ -4,10 +4,10 @@ dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
 init = init(:);
-D = Laplacian(Nx, Nx, dx, dimension, 0);
+D = Laplacian(Nx, Nx, dx, dimension, 1);
 T = 1;
-dt = T/2^14;
-alpha = 0.9;
+% dt = T/2^14;
+alpha = 0.3;
 
 %%%%%
 order = 1;
@@ -22,8 +22,8 @@ order = 1;
 % end
 % %%%%%
 
-power = 9:14;
-T_list = T./(2.^power)/10^3;
+power = 8:12;
+T_list = T./(2.^power);
 result = [];
 max_result = [];
 for time_s = length(T_list):-1:1
