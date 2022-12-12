@@ -26,7 +26,7 @@ function [alpha,result, max_result, sol] = subdiffu_main(alpha, order, Domain_si
     
     power = pow_min:pow_max;
     T_list = T./(2.^power);
-    result = [];
+    max_result = [];
     result = [];
     for time_s = length(T_list):-1:1
         sol = subdiffusion(order, Nx, D, init, alpha, T, T_list(time_s), 1);
