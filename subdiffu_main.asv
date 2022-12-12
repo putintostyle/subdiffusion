@@ -1,16 +1,17 @@
 Domain_size = 1;
-Nx = 2^10-2;
+Nx = 100-2;
 dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
 init = init(:);
-D = Laplacian(Nx, Nx, dx, dimension, 1);
+function [alpha, ]subdiffu_main
+D = Laplacian(Nx, Nx, dx, dimension, 0);
 T = 1;
 % dt = T/2^14;
-alpha = 0.7;
+alpha = 0.3;
 
 %%%%%
-order = 1;
+order = 2;
 % %%%%%
 % ref = subdiffusion(order, Nx, D, init, alpha, T, dt,1);
 % 
@@ -22,8 +23,8 @@ order = 1;
 % end
 % %%%%%
 
-power = 5.*(0:);
-T_list = T./power;
+power = 10:14;
+T_list = T./(2.^power);
 result = [];
 max_result = [];
 for time_s = length(T_list):-1:1
