@@ -6,7 +6,7 @@ function history_arr = subdiffusion(order, Nx, D, init, alpha, T, dt, dim)
     else
         history_arr = [zeros(Nx*Nx,1),zeros(Nx*Nx,1)];
     end
-
+    init = init(:);
     source = -D*init;
     for iteration = progress(1:T/dt)
 % % % % % % % % % %         BDF1

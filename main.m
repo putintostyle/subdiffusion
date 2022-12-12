@@ -14,7 +14,7 @@ eps = dx;
 plot_fig = true;
 [hist_arr] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 8:12;
+power = 10:14;
 T_list = T./(2.^power);
 
 

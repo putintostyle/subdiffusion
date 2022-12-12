@@ -4,13 +4,13 @@ dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
 init = init(:);
-D = Laplacian(Nx, Nx, dx, dimension, 1);
+D = Laplacian(Nx, Nx, dx, dimension, 0);
 T = 1;
 % dt = T/2^14;
-alpha = 0.7;
+alpha = 0.3;
 
 %%%%%
-order = 1;
+order = 2;
 % %%%%%
 % ref = subdiffusion(order, Nx, D, init, alpha, T, dt,1);
 % 
