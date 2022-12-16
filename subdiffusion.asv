@@ -2,65 +2,78 @@ function history_arr = subdiffusion(order, Nx, D, init, alpha, T, dt, dim)
     
     q = q_weight(T/dt, dt, alpha);
     if dim == 1
-        history_arr = [zeros(Nx,1),zeros(Nx,1)];
+        if order == 1
+            history_arr = [zeros(Nx,1)];
+        else
+            history_arr = [zeros(Nx,1),zeros(Nx,1)];
+        end
     else
         history_arr = [zeros(Nx*Nx,1),zeros(Nx*Nx,1)];
     end
     init = init(:);
-    b = D*init;
+    source = D*init;
+    if order == 1
+       if dim == 1
+               M = sparse((-q(1).*eye(Nx)+D));
+                    
+       else
+               M = sparse((-q(1).*eye(Nx*Nx)+D));
+       end
+
+    elseif order == 2
+       if dim == 1
+               M = sparse((-3*q(1)./2.*eye(Nx)+D));
+       else
+               M = sparse((-3*q(1)./2.*eye(Nx*Nx)+D));
+       end
+    end
+
     for iteration = progress(1:T/dt)
 % % % % % % % % % %         BDF1
         if order == 1
-            b = b-1*q(1).*history_arr(:,end);
+            
             if iteration == 1
-                if dim == 1
-                    M = sparse((-q(1).*eye(Nx)+D));
-                    root  = M\(b);
-                else
-                    root  = linsolve((-q(1).*eye(Nx*Nx)+D),(b-source));
-                end
+                
+                b_0 = source-q(1).*history_arr(:,end);
+                root = M\b_0;
+                
             else
-                if dim == 1
+                
+                diff_b = diff(history_arr, 1, 2);
 
-                    M = sparse((-q(1).*eye(Nx)+D));
-                else
-                    M = sparse((-q(1).*eye(Nx*Nx)+D));
-                end
+                q_r = q(iteration:-1:2);
 
-                for time = 1:iteration-1
-                     
-                     b = b+q(time+1).*(history_arr(:,end-(time-1))-history_arr(:,end-(time-1)-1));     
-                     
-                     root  = M\(b-source);
-                   
-                end
+                b = b_0+sum(diff_b.*q_r, 2);
+%                 for time = 1:iteration-1
+%                      
+%                      b = b+q(time+1).*(history_arr(:,end-(time-1))-history_arr(:,end-(time-1)-1));     
+%                      
+%                 end
+                root  = M\b;
             end
 % % % % % % % % % %         BDF2
         elseif order == 2
-            b = q(1).*(history_arr(:,end-1)-4.*history_arr(:,end))./2;
-            if iteration == 1
-                if dim == 1
-                    root  = linsolve((-3*q(1)/2.*eye(Nx)+D),(b-source));
-                else
-                    root  = linsolve((-3*q(1)/2.*eye(Nx*Nx)+D),(b-source));
-                end
-            else
-                if dim == 1
-                    M = sparse((-3*q(1)./2.*eye(Nx)+D));
-                else
-                    M = sparse((-3*q(1)./2.*eye(Nx*Nx)+D));
-                end
+            
 
+            if iteration == 1
+                
+                b = b+q(1).*(history_arr(:,end-1)-4.*history_arr(:,end))./2;
+                root  = M\b;
+                
+            else
+            
+                
                 for time = 1:iteration-1
                      
                      b = b+q(time+1)*(3.*history_arr(:,end-(time-1))-4.*history_arr(:,end-(time-1)-1)+history_arr(:,end-(time-1)-2))/2;     
-                     root = M\(b-source);
+                     
                 end
+                root = M\(b);
             end
         end
 
         if sum(abs(root)>1)
-            root
+            disp('rrr')
             break
         else
             history_arr = [history_arr, root(:)];

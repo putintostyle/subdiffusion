@@ -30,6 +30,7 @@ function [hist_arr] = AllenCahn(order, Nx, D, init, alpha, T, dt, dim, method, e
                     
                     
                 else
+
                     for time = 1:iteration-1
                          
                         b = b-q(time+1).*(hist_arr(:,end-(time-1))-hist_arr(:,end-(time-1)-1));     
