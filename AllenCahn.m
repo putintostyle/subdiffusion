@@ -3,6 +3,12 @@ function [hist_arr] = AllenCahn(order, Nx, D, init, alpha, T, dt, dim, method, e
    % % % % % % % % % %         BDF1
    if order == 1
        hist_arr = [init(:)];
+       if dim == 1
+               M = sparse((-q(1).*eye(Nx)+D));
+                    
+       else
+               M = sparse((-q(1).*eye(Nx*Nx)+D));
+       end
        for iteration = progress(1:T/dt)
             if method == 'c'
                 fun = @(U)polyU_1(U, hist_arr, q, D, iteration);
@@ -13,15 +19,14 @@ function [hist_arr] = AllenCahn(order, Nx, D, init, alpha, T, dt, dim, method, e
                 
                 root = fsolve(fun, x_0, options);
             elseif method == 'l'
+
                 b = (q(1)+3).*hist_arr(:,end)-hist_arr(:,end).^3;
             
             
                 if iteration == 1
-                    if dim == 1
-                        root  = linsolve(((q(1)+2).*eye(Nx)-eps^2.*D),(b));
-                    elseif dim ==2
-                        root  = linsolve(((q(1)+2).*eye(Nx^2)-eps^2.*D),(b));
-                    end
+                  
+                    root  = M\b;
+                end
                     
                     
                 else
@@ -29,12 +34,10 @@ function [hist_arr] = AllenCahn(order, Nx, D, init, alpha, T, dt, dim, method, e
                          
                         b = b-q(time+1).*(hist_arr(:,end-(time-1))-hist_arr(:,end-(time-1)-1));     
                              
-                        if dim == 1
-                            root  = linsolve(((q(end)+2).*eye(Nx)-eps^2.*D),(b));
-                        elseif dim ==2
-                            root  = linsolve(((q(end)+2).*eye(Nx^2)-eps^2.*D),(b));
-                        end     
+                        
+                    
                     end
+                    root  = M\b;
                 end
             end
             hist_arr = [hist_arr, root(:)];

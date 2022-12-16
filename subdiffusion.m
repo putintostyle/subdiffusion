@@ -8,15 +8,25 @@ function history_arr = subdiffusion(order, Nx, D, init, alpha, T, dt, dim)
     end
     init = init(:);
     b = D*init;
+    if order == 1
+       if dim == 1
+               M = sparse((-q(1).*eye(Nx)+D));
+                    
+       else
+               M = sparse((-q(1).*eye(Nx*Nx)+D));
+       end
+
+    elseif order == 2
+       if dim == 1
+               M = sparse((-3*q(1)./2.*eye(Nx)+D));
+       else
+               M = sparse((-3*q(1)./2.*eye(Nx*Nx)+D));
+       end
+    end
+
     for iteration = progress(1:T/dt)
 % % % % % % % % % %         BDF1
         if order == 1
-            if dim == 1
-               M = sparse((-q(1).*eye(Nx)+D));
-                    
-            else
-               M = sparse((-q(1).*eye(Nx*Nx)+D));
-            end
             
             if iteration == 1
                 b = b-q(1).*history_arr(:,end);
@@ -27,34 +37,27 @@ function history_arr = subdiffusion(order, Nx, D, init, alpha, T, dt, dim)
                      
                      b = b+q(time+1).*(history_arr(:,end-(time-1))-history_arr(:,end-(time-1)-1));     
                      
-                     root  = M\b;
-                   
                 end
+                root  = M\b;
             end
 % % % % % % % % % %         BDF2
         elseif order == 2
-            b = b+q(1).*(history_arr(:,end-1)-4.*history_arr(:,end))./2;
+            
+
             if iteration == 1
-                if dim == 1
-                    M = sparse((-3*q(1)./2.*eye(Nx)+D));
-                else
-                    M = sparse((-3*q(1)./2.*eye(Nx*Nx)+D));
-                end
                 
+                b = b+q(1).*(history_arr(:,end-1)-4.*history_arr(:,end))./2;
                 root  = M\b;
                 
             else
-                if dim == 1
-                    M = sparse((-3*q(1)./2.*eye(Nx)+D));
-                else
-                    M = sparse((-3*q(1)./2.*eye(Nx*Nx)+D));
-                end
+            
 
                 for time = 1:iteration-1
                      
                      b = b+q(time+1)*(3.*history_arr(:,end-(time-1))-4.*history_arr(:,end-(time-1)-1)+history_arr(:,end-(time-1)-2))/2;     
-                     root = M\(b);
+                     
                 end
+                root = M\(b);
             end
         end
 
