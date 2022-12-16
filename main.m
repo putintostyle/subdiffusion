@@ -1,21 +1,21 @@
 Domain_size = 1;
-Nx = 100-2;
+Nx = 200-2;
 dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
 init = init(:);
 D = Laplacian(Nx, Nx, dx, dimension, 1); %(nx, ny, h_step ,dim, method)
 T = 1;
-pow_2 = 12;
-dt = T/2^8;
+% pow_2 = 12;
+% dt = T/2^8;
 
 alpha = 0.3;
 eps = dx;
-plot_fig = true;
-[hist_arr] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
+% plot_fig = true;
+% [hist_arr] = AllenCahn(1, Nx, D, init, alpha, T, dt, 1, 'l', eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 10:14;
-T_list = T./(2.^power);
+power = 0:5;
+T_list = T./(2.^power)/100;
 
 
 result = [];

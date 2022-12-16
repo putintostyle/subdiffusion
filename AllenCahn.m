@@ -30,9 +30,9 @@ function [hist_arr] = AllenCahn(order, Nx, D, init, alpha, T, dt, dim, method, e
                         b = b-q(time+1).*(hist_arr(:,end-(time-1))-hist_arr(:,end-(time-1)-1));     
                              
                         if dim == 1
-                            root  = linsolve(((q(1)+2).*eye(Nx)-eps^2.*D),(b));
+                            root  = linsolve(((q(end)+2).*eye(Nx)-eps^2.*D),(b));
                         elseif dim ==2
-                            root  = linsolve(((q(1)+2).*eye(Nx^2)-eps^2.*D),(b));
+                            root  = linsolve(((q(end)+2).*eye(Nx^2)-eps^2.*D),(b));
                         end     
                     end
                 end
