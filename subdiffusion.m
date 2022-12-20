@@ -57,17 +57,17 @@ function history_arr = subdiffusion(order, Nx, D, init, alpha, T, dt, dim)
 
             if iteration == 1
                 
-                b = b+q(1).*(history_arr(:,end-1)-4.*history_arr(:,end))./2;
+                b = source+q(1).*(history_arr(:,end-1)-4.*history_arr(:,end))./2;
                 root  = M\b;
                 
             else
-            
+%                 diff_b = (3.*history_arr(:,3:end)-4.*history_arr(:,2:end-1)+history_arr(:,1:end-2))./2;
+                diff_b_tmp = diff(history_arr, 1, 2);
                 
-                for time = 1:iteration-1
-                     
-                     b = b+q(time+1)*(3.*history_arr(:,end-(time-1))-4.*history_arr(:,end-(time-1)-1)+history_arr(:,end-(time-1)-2))/2;     
-                     
-                end
+                diff_b = (3.*diff_b_tmp(:, 2:end)-diff_b_tmp(:, 1:end-1))./2;
+                q_r = q(iteration:-1:2);
+
+                b = source+sum(diff_b.*q_r, 2)-q(1).*(4.*history_arr(:,end)-history_arr(:,end-1))./2;
                 root = M\(b);
             end
         end

@@ -34,10 +34,18 @@ function [alpha,result, max_result, sol] = subdiffu_main(alpha, order, Domain_si
         if time_s<length(T_list)
             disp(size(sol_ref(:,1:2:end)))
             disp(size(sol))
-            e = sum(dx.*(sol-sol_ref(:,1:2:end)).^2, 1).^(1/2);
+            if order == 1
+                e = sum(dx.*(sol-sol_ref(:,1:2:end)).^2, 1).^(1/2);
+            else
+                e = sum(dx.*(sol(:, 2:end)-sol_ref(:,1:2:end)).^2, 1).^(1/2);
+            end
             max_result = [max_result, max(e)];
         end
-        sol_ref = sol;
+        if order == 1
+            sol_ref = sol;
+        else
+            sol_ref = sol(:, 2:end);
+        end
         result = [result, sol(:,end)];
     end
     % surf(reshape(ref, [Nx, Nx]))
