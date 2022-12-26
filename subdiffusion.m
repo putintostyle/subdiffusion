@@ -35,6 +35,7 @@ function history_arr = subdiffusion(order, Nx, D, init, alpha, T, dt, dim)
             if iteration == 1
                 
                 b = source-q(1).*history_arr(:,end);
+                
                 root = M\b;
                 
             else

@@ -1,6 +1,7 @@
 function [alpha,result, max_result, sol] = subdiffu_main(alpha, order, Domain_size, Nx, dimension, T, pow_min, pow_max)
     % Domain_size
     % = 1;
+    
     Nx = Nx-2;
     dx = Domain_size/Nx;
     % dimension = 1;
@@ -53,7 +54,7 @@ function [alpha,result, max_result, sol] = subdiffu_main(alpha, order, Domain_si
     e = sum((result(:, 2:end)-result(:, 1:end-1)).^2, 1).^(1/2);
     % e = sum((result-ref).^2, 1).^(1/2);
     tmp = T_list(length(T_list):-1:1);
-    A = [log(tmp(2:end)'), ones(length(e),1)];
-    b = log(e(:));
+    A = [log(tmp(2:end)'), ones(length(max_result),1)];
+    b = log(max_result(:));
     sol = A\b
 end
