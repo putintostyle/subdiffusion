@@ -1,4 +1,4 @@
-function order_list =  test(alpha, order, Domain_size, Nx, dimension, T, pow_min, pow_max, ref_pow)
+function [order_list, error_list] =  test(alpha, order, Domain_size, Nx, dimension, T, pow_min, pow_max, ref_pow)
     Nx = Nx-2;
     dx = Domain_size/Nx;
     % dimension = 1;
@@ -7,7 +7,7 @@ function order_list =  test(alpha, order, Domain_size, Nx, dimension, T, pow_min
     
     D = Laplacian(Nx, Nx, dx, dimension, 0);
     order_list = [];
-%     error_list = [];
+    error_list = [];
 
     for a=alpha
         ref = subdiffusion(order, Nx, D, init, alpha, T, T/(2^ref_pow)/(10^4), 1);
@@ -46,6 +46,7 @@ function order_list =  test(alpha, order, Domain_size, Nx, dimension, T, pow_min
         b = log(max_result(:));
         sol = A\b
         order_list = [order_list, sol(1)];
+        error_list = [error_list; max_result];
     end
 
 end
