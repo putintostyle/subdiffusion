@@ -28,7 +28,7 @@ function [order_list, error_list] =  test(alpha, order, Domain_size, Nx, dimensi
                     e = sum((sol-ref(:,1:2^(ref_pow-power(end-idx)):end)).^2, 1).^(1/2)*dx;
     %                 disp(e(1:6))
                 else
-                    e = sum((sol(:, 2:end)-sol_ref(:,1:2^(ref_pow/power(idx)):end)).^2, 1).^(1/2)*dx;
+                    e = sum((sol(:, 2:end)-ref(:,1:2^(ref_pow-power(idx)):end)).^2, 1).^(1/2)*dx;
                     
                 end
                 max_result = [max_result, max(e)];
