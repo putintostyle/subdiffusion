@@ -1,4 +1,4 @@
-function [order_list_1, order_list_2, error_list_1, error_list_2] =  test(alpha, order, Domain_size, Nx, dimension, T, pow_min, pow_max, ref_pow)
+function [order_list_1, order_list_2, error_list] =  test(alpha, order, Domain_size, Nx, dimension, T, pow_min, pow_max, ref_pow)
     Nx = Nx-2;
     dx = Domain_size/Nx;
     % dimension = 1;
@@ -6,10 +6,9 @@ function [order_list_1, order_list_2, error_list_1, error_list_2] =  test(alpha,
     init = init(:);
     
     D = Laplacian(Nx, Nx, dx, dimension, 0);
-    order_list_1 = [];
-    order_list_2 = [];
-    error_list_1 = [];
-    error_list_2 = [];
+    order_list = [];
+    error_list = [];
+
     for a=alpha
         ref = subdiffusion(order, Nx, D, init, a, T, T/(2^ref_pow)./(10^4), 1);
 
@@ -42,9 +41,7 @@ function [order_list_1, order_list_2, error_list_1, error_list_2] =  test(alpha,
                     sol_ref = solu;
                 end
                 max_result_1 = [max_result_1, max(e_1)];
-                if time_s<length(T_list)
-                    max_result_2 = [max_result_2, max(e_2)];
-                end
+                max_result_2 = [max_result_1, max(e_2)];
                 idx = idx+1;
                 
 %             end
@@ -60,12 +57,9 @@ function [order_list_1, order_list_2, error_list_1, error_list_2] =  test(alpha,
         b = log(max_result_1(:));
         sol = A\b;
         order_list_1 = [order_list_1, sol(1)];
-        error_list_1 = [error_list_1; max_result_1];
-        A = [log(tmp(2:end)'), ones(length(max_result_2),1)];
-        b = log(max_result_2(:));
-        sol = A\b;
-        order_list_2 = [order_list_2, sol(1)];
-        error_list_2 = [error_list_2; max_result_2];
+        A = [log(tmp(1:end)'), ones(length(max_result_2),1)];
+        order_list_1 = [order_list_1, sol(1)];
+        error_list = [error_list; max_result];
     end
 
 end
