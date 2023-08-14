@@ -42,7 +42,7 @@ function history_arr = modif_subdiffusion(order, Nx, D, init, alpha, T, dt, dim)
 %                 root = M\b;
             elseif iteration == 2
                 
-                b = (1-5/12)*source-(q1(1)+q(1)/2).*history_arr(:,end)+(q1(2)-q2(1)+q(1)/2).*(history_arr(:,end)-history_arr(:,end-1));
+                b = (1-5/12)*source-(q1(1)+q(1)/2).*history_arr(:,end)+(q1(2)-q2(1)-q(1)/2).*(history_arr(:,end)-history_arr(:,end-1));
                 
                 root = M\b;
             else
@@ -55,8 +55,9 @@ function history_arr = modif_subdiffusion(order, Nx, D, init, alpha, T, dt, dim)
                 % q1_r =(n-1)^{1-\alpha}..(n-(n)+1)^{1-\alpha}
                 q2_r = q2(iteration-1:-1:1); 
                 % q2_r =(n)^{1-\alpha}..(n-(n)+1)^{1-\alpha}
-                q_r = q(iteration:-1:2);
-                b = source+sum(diff_b(:,1:end).*q1_r, 2)-sum(diff_b(:, 1:end).*q2_r, 2)-q1(1).*history_arr(:,end)-sum(diff_b(:, 1:end).*q_r, 2);
+                q_r = q(iteration-1:-1:1);
+                q_r_1 = q(iteration:-1:2);
+                b = source+sum(diff_b(:,1:end).*q1_r, 2)-sum(diff_b(:, 1:end).*q2_r, 2)-(q1(1)+q(1)/2).*history_arr(:,end)-sum(diff_b(:, 1:end).*q_r, 2)/2-sum(diff_b(:, 1:end).*q_r_1, 2)/2;;
                 root  = M\b;
                
             end
