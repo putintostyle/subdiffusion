@@ -3,14 +3,14 @@ function y = BDF(y0, t0, dt, intTer, lambda, q, alpha)
 
     y = [y0];
     
-    y_diff = [0];
-    for time = 1:intTer
+    y_diff = [];
+    for time = 1:intTer-1
 
         f = source(t0+(time-1)*dt, alpha);
        
         if time == 1
             sol = (lambda+q(1))*y(end)+f;
-            y_diff = [];
+            
         else
             sol = (lambda+q(1))*y(end)-sum(y_diff.*q(2:time))+f;
         end

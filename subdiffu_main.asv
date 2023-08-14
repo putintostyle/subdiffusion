@@ -15,8 +15,7 @@ function [alpha,result, max_result, sol] = subdiffu_main(alpha, order, Domain_si
     %%%%%
     % order = 2;
     % %%%%%
-%     ref = modif_subdiffusion(1, 62, D, init, alpha, 1, 2^(-10),1);
-%     ref = ref(:, end);
+%     ref = subdiffusion(order, Nx, D, init, alpha, T, dt,1);
     % 
     % x_grid = dx:dx:Domain_size;
     
@@ -52,8 +51,7 @@ function [alpha,result, max_result, sol] = subdiffu_main(alpha, order, Domain_si
     end
     % surf(reshape(ref, [Nx, Nx]))
     e = sum((result(:, 2:end)-result(:, 1:end-1)).^2, 1).^(1/2);
-%     e = sum((result-ref).^2, 1).^(1/2);
-%     e
+    % e = sum((result-ref).^2, 1).^(1/2);
     tmp = T_list(length(T_list):-1:1);
     A = [log(tmp(2:end)'), ones(length(e),1)];
     b = log(e(:));

@@ -1,0 +1,73 @@
+function history_arr = modif_subdiffusion(order, Nx, D, init, alpha, T, dt, dim)
+    
+
+    q = q_weight(T/dt, dt, alpha);
+    [q1, q2] = q_weight_2(T/dt, dt, alpha);
+    if dim == 1
+        if order == 1
+            history_arr = [zeros(Nx,1)];
+        else
+            history_arr = [zeros(Nx,1),zeros(Nx,1)];
+        end
+    else
+        history_arr = [zeros(Nx*Nx,1),zeros(Nx*Nx,1)];
+    end
+    init = init(:);
+    source = D*init;
+    if order == 1
+       if dim == 1
+               M = sparse((-(q1(1)+1/2*q(1)).*eye(Nx)+D));
+                    
+       else
+           % do nothing
+       end
+
+    elseif order == 2
+       % do nothing 
+    end
+
+    for iteration = progress(1:T/dt)
+        %% BDF1
+        if order == 1
+            
+            if iteration == 1
+                
+                b = (1+11/12)*source-q1(1).*history_arr(:,end);
+                
+                root = M\b;
+%             elseif iteration == 2
+%                 diff_b = diff(history_arr, 1, 1);
+%                 
+%                 b = (1-5/12)*source+diff_b(:, end).*(q1(2)-q2(1))-q1(1).*history_arr(:,end);
+%                 root = M\b;
+            elseif iteration == 2
+                
+                b = (1-5/12)*source-(q1(1)+q(1)/2).*history_arr(:,end)+(q1(2)-q2(1)+q(1)/2).*(history_arr(:,end)-history_arr(:,end-1));
+                
+                root = M\b;
+            else
+                
+                diff_b = diff(history_arr, 1, 2); % u_k-u_{k-1}
+                % q1 = (n-(n)+1)^{1-\alpha}...n^{1-\alpha}
+                % q2 = (n-(n)+1)^{1-\alpha}...n^{1-\alpha}
+                
+                q1_r = q1(iteration:-1:2); 
+                % q1_r =(n-1)^{1-\alpha}..(n-(n)+1)^{1-\alpha}
+                q2_r = q2(iteration-1:-1:1); 
+                % q2_r =(n)^{1-\alpha}..(n-(n)+1)^{1-\alpha}
+                q_r = q(iteration:-1:2);
+                b = source+sum(diff_b(:,1:end).*q1_r, 2)-sum(diff_b(:, 1:end).*q2_r, 2)-q1(1).*history_arr(:,end)-sum(diff_b(:, 1:end).*q_r, 2);
+                root  = M\b;
+               
+            end
+%% BDF2
+        elseif order == 2
+            % do nothing 
+        end
+
+        
+        history_arr = [history_arr, root(:)];
+        
+    end
+%     history_arr = history_arr(:,end);
+end 

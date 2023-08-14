@@ -11,10 +11,10 @@ function [order_list_1, order_list_2, error_list_1, error_list_2] =  test(alpha,
     error_list_1 = [];
     error_list_2 = [];
     for a=alpha
-        ref = subdiffusion(order, Nx, D, init, a, T, T/(2^ref_pow)./(10^4), 1);
+        ref = subdiffusion(order, Nx, D, init, a, T, T/(2^ref_pow)./(10^0), 1);
 
         power = pow_min:pow_max;
-        T_list = T./(2.^power)./(10^4);
+        T_list = T./(2.^power)./(10^0);
         max_result_1 = [];
         max_result_2 = [];
         result = [];

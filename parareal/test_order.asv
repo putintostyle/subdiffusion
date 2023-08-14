@@ -1,0 +1,16 @@
+y0 = 0;
+ts = 0;
+te = 1;
+t = 6:12;
+dt = 2.^(-t);
+y_sol = [];
+alpha = .5;
+N = 2.^t;
+lambda = -1;
+exact = coarseT.^(3+alpha); 
+parfor i = 1:length(dt)
+    
+    qe = q_weight(N(i), dt(i), alpha);
+    y_numerical = BDF(y0, ts, dt(i), N(i), lambda, qe, alpha);
+    y_sol = [y_sol; y_numerical];
+end
