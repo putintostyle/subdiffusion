@@ -1,7 +1,7 @@
 function init = initial(Domain_size, dx, dim)
     if dim ==1
         x = dx:dx:Domain_size;
-        init = x.*(1-x);
+        init = x.*(x-1);
     else
         x = dx:dx:Domain_size;
         y = dx:dx:Domain_size;

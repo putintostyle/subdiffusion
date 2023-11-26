@@ -1,46 +1,50 @@
 Domain_size = 1;
-Nx = 200-2;
+Nx = 400-2;
 dx = Domain_size/Nx;
 dimension = 1;
 init = initial(Domain_size, dx, dimension);
 init = init(:);
 D = Laplacian(Nx, Nx, dx, dimension, 1); %(nx, ny, h_step ,dim, method)
-T = 1e-4;
+T = 1;
 % pow_2 = 12;
-dt = T/100;
-alpha = 0.9;
-eps = dx;
-plot_fig = true;
-hist_arr = AllenCahn(1, Nx, D, init, alpha, T, dt, 1,  eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
+% dt = T/1000;
+alpha = 0.5;
+eps = sqrt(0.5);
+plot_fig = false;
+% hist_arr = AllenCahn(1, Nx, D, init, alpha, T, dt, 1,  eps); %(order, Nx, D, init, alpha, T, dt, dim, method, eps)
 
-power = 2:4;
+power = 11:16;
 T_list = T./(2.^power);
 
 
-conv = [];
-LTC = [];
-for time_s = length(T_list):-1:1
-    
-    [sol] = AllenCahn(1, Nx, D, init, alpha, T, T_list(time_s), 1, eps);
-    
-    if time_s<length(T_list)
-        disp(size(sol_ref(:,1:2:end)))
-        disp(size(sol))
-        e = sum((sol-sol_ref(:,1:2:end)).^2, 1).^(1/2);
-        conv = [conv, max(e)];
+
+record = [];
+for al = [0.3, 0.7]
+    conv = [];
+    for time_s = length(T_list):-1:1
+        
+        sol = AllenCahn(2, Nx, D, init, al, T, T_list(time_s), 1, eps);
+        
+        if time_s<length(T_list)
+            disp(size(sol_ref(:,1:2:end)))
+            disp(size(sol))
+            e = sum((sol-sol_ref(:,1:2:end)).^2, 1).^(1/2);
+            conv = [conv, max(e)];
+        end
+        sol_ref = sol;
+        % LTC = [LTC, sol(:,end)];
     end
-    sol_ref = sol;
-    LTC = [LTC, sol(:,end)];
-    
+    tmp = T_list(length(T_list):-1:1)'; 
+    A = [log(tmp(1:end-1)), ones(length(conv),1)];
+    b = log(conv(:));
+    A\b
+    disp(conv)
+    record = [record; conv];
 end
 
 % 
 % e = sum((result-reference(:,end)).^2, 1).^(1/2);
-e = sum(diff(LTC, 1, 2).^2,1).^(1/2)*dx;
-tmp = T_list(length(T_list):-1:1)'; 
-A = [log(tmp(1:end-1)), ones(length(conv),1)];
-b = log(conv(:));
-A\b
+% e = sum(diff(LTC, 1, 2).^2,1).^(1/2)*dx;
 
 
 
